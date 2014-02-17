@@ -1,0 +1,139 @@
+#!/usr/bin/env python
+
+import json
+import os
+import sys
+from collections import OrderedDict
+
+import requests
+
+
+PYPI_GET_PACKAGE_INFO_URL = 'http://pypi.python.org/pypi/{0}/json'
+CONFIG_FILE = os.path.expanduser('~/.pypispy')
+DEFAULT_CONFIG = {
+    'packages': [
+        'onepyssword',
+        'copypaste',
+        'rainbowrunners',
+        'pypispy',
+    ],
+    'schema': (
+        (
+            'info', (
+                'version',
+                (
+                    'downloads', (
+                        'last_day',
+                        'last_week',
+                        'last_month',
+                    ),
+                ),
+            ),
+        ),
+    ),
+}
+
+
+class Color(object):
+    BLUE = '\033[94m'
+    RED = '\033[31m'
+    PURPLE = '\033[95m'
+    GREEN = '\033[92m'
+    END = '\033[0m'
+
+
+def get_packages_info(names, schema, timeout=3.0):
+
+    def get_package_info(name):
+        response = requests.post(
+            PYPI_GET_PACKAGE_INFO_URL.format(name), timeout=timeout
+        )
+        if response.status_code != requests.codes.OK:
+            return None
+        return response.json()
+
+    for name in names:
+        data = get_package_info(name)
+        if data is None:
+            yield name, None
+            continue
+        yield name, get_processed_package_info(data, schema)
+
+
+def get_processed_package_info(data, schema):
+    result = OrderedDict()
+
+    def process_package_info(data, schema, result):
+        for item in schema:
+            if isinstance(item, (tuple, list,)):
+                key, rschema = item
+                rresult = result[key] = OrderedDict()
+                process_package_info(data[key], rschema, rresult)
+            elif isinstance(item, str):
+                result[item] = data[item]
+            else:
+                raise NotImplementedError
+
+    process_package_info(data, schema, result)
+    return result
+
+
+def walk_and_print_package_data(name, data):
+    stdout_package_name(name)
+    if not data:
+        stdout_not_found()
+        return
+
+    def walk_package_data(data, depth=1):
+        for k, v in data.items():
+            if isinstance(v, dict):
+                stdout_group(k, depth)
+                walk_package_data(v, depth + 1)
+            else:
+                stdout_group_item(k, v, depth)
+
+    walk_package_data(data)
+    stdout_new_line()
+
+
+stdout_package_name = lambda n: sys.stdout.write(
+    '{0}{1}{2}\n'.format(Color.BLUE, n, Color.END)
+)
+stdout_not_found = lambda: sys.stdout.write(
+    '{0}Package not found...{1}\n\n'.format(Color.RED, Color.END)
+)
+stdout_group = lambda gn, d: sys.stdout.write(
+    '{0}{1}> {2}:{3}\n'.format(Color.PURPLE, '--' * d, gn, Color.END)
+)
+stdout_group_item = lambda k, v, d: sys.stdout.write(
+    '{0}{1}> {2}: {3}{4}\n'.format(Color.GREEN, '--' * d, k, v, Color.END)
+)
+stdout_new_line = lambda: sys.stdout.write('\n')
+
+
+def create_default_config():
+    with open(CONFIG_FILE, 'wb') as f:
+        config = json.dumps(DEFAULT_CONFIG, indent=4)
+        f.write(config.encode('utf-8'))
+
+
+def load_config():
+    with open(CONFIG_FILE, 'rb') as f:
+        return json.loads(f.read().decode('utf-8'))
+
+
+def go():
+    if not os.path.exists(CONFIG_FILE):
+        create_default_config()
+        sys.stdout('Default config created at {0}'.format(CONFIG_FILE))
+
+    config = load_config()
+
+    packages = config['packages']
+    schema = config['schema']
+
+    for name, data in get_packages_info(packages, schema):
+        walk_and_print_package_data(name, data)
+
+
+go()

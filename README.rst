@@ -2,7 +2,9 @@ pypispy
 =======
 
 "Big Brother" is watching your packages!
-```
+
+::
+
                           .,,ccc$$hcccccc,.
                        .zd$$$$$$$$$$$$$$$$$$$c,.
                     .zd$$$$$$$$$$$$$$$$$$$$$$$$$$c,
@@ -36,39 +38,37 @@ pypispy
            $$$$$          `?$$$$$$$$$$$$P'    $$$$$$>
            $$$$$            `"?$$$$$$$P"      $$$$$$L
           ;$$$$$                             ?$$$$$$
-```
 
 Install
 -------
 
-```shell
-% pip install pypispy
-```
+::
+
+    % pip install pypispy
+
 
 Command line usage
 ------------------
 
-To get information about packages:
+To get information about packages::
 
-```shell
-% pypispy
-onepyssword
---> info:
-----> version: 0.3.1
-----> downloads:
-------> last_day: 8
-------> last_week: 120
-------> last_month: 882
+    % pypispy
+    onepyssword
+    --> info:
+    ----> version: 0.3.1
+    ----> downloads:
+    ------> last_day: 8
+    ------> last_week: 120
+    ------> last_month: 882
 
-copypaste
---> info:
-----> version: 0.2
-----> downloads:
-------> last_day: 5
-------> last_week: 61
-------> last_month: 448
+    copypaste
+    --> info:
+    ----> version: 0.2
+    ----> downloads:
+    ------> last_day: 5
+    ------> last_week: 61
+    ------> last_month: 448
 
-```
 
 Default config you can found at ``~/.pypispy``.
 
