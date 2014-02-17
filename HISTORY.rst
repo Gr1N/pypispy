@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-0.1.1 (unreleased)
-----------------
+0.1.1 (2014-02-17)
+------------------
 
 - Python 2.x compatibility.
 
