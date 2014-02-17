@@ -1,11 +1,11 @@
 Changelog
 =========
-    
 
-0.2 (unreleased)
+
+0.1.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Python 2.x compatibility.
 
 
 0.1 (2014-02-17)

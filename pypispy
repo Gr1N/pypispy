@@ -8,6 +8,16 @@ from collections import OrderedDict
 import requests
 
 
+PY2 = sys.version_info[0] == 2
+PY3 = sys.version_info[0] == 3
+
+
+if PY3:
+    string_types = (str, )
+else:
+    string_types = (basestring, )
+
+
 PYPI_GET_PACKAGE_INFO_URL = 'http://pypi.python.org/pypi/{0}/json'
 CONFIG_FILE = os.path.expanduser('~/.pypispy')
 DEFAULT_CONFIG = {
@@ -69,7 +79,7 @@ def get_processed_package_info(data, schema):
                 key, rschema = item
                 rresult = result[key] = OrderedDict()
                 process_package_info(data[key], rschema, rresult)
-            elif isinstance(item, str):
+            elif isinstance(item, string_types):
                 result[item] = data[item]
             else:
                 raise NotImplementedError
