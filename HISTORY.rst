@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-0.1.2 (unreleased)
-----------------
+0.1.2 (2014-02-18)
+------------------
 
 - fixed TypeError issue (https://github.com/Gr1N/pypispy/pull/1).
 
