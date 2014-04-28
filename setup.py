@@ -36,10 +36,11 @@ setup(
     packages=find_packages(),
     install_requires=[
         'setuptools',
-        'requests==2.2.1',
+        'requests>=2.2.1',
     ],
     extras_require={
         'development': (
+            'flake8',
             'zest.releaser',
             'check-manifest',
         ),
