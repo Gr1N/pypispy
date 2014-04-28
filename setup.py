@@ -18,7 +18,7 @@ long_description = """{0}
 
 setup(
     name='pypispy',
-    version='0.1.3',
+    version='0.2.dev0',
     description='"Big Brother" is watching your packages!',
     long_description=long_description,
     classifiers=(
