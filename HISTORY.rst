@@ -2,10 +2,11 @@ Changelog
 =========
 
 
-0.2 (unreleased)
+0.1.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Remove "requests" hard version dependency.
+- Add "flake8" support.
 
 
 0.1.1 (2014-02-17)
