@@ -135,7 +135,7 @@ def load_config():
 def go():
     if not os.path.exists(CONFIG_FILE):
         create_default_config()
-        sys.stdout('Default config created at {0}'.format(CONFIG_FILE))
+        sys.stdout.write('Default config created at {0}'.format(CONFIG_FILE))
 
     config = load_config()
 
